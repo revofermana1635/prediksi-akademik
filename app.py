@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 
 # ── Page config ──────────────────────────────────────────────
 st.set_page_config(
-    page_title="Prediksi Performa Akademik Siswa",
+    page_title="Prediksi Performa Akademik Pelajar Berdasarkan Penggunaan AI",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -199,7 +199,7 @@ def run_knn(df, k, test_size, random_state=42):
 
 # ── Sidebar ──────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 🎓 Pengaturan Model")
+    st.markdown("## Pengaturan Model")
     st.markdown("---")
 
     st.markdown("### 📁 Upload Dataset")
@@ -212,7 +212,7 @@ with st.sidebar:
     use_sample = st.checkbox("Gunakan data sampel (demo)", value=uploaded is None)
 
     st.markdown("---")
-    st.markdown("### ⚙️ Hyperparameter KNN")
+    st.markdown("### Hyperparameter KNN")
     k_value    = st.slider("Nilai K (tetangga)", 1, 20, 5)
     test_ratio = st.slider("Proporsi data uji (%)", 10, 40, 20) / 100
 
@@ -236,10 +236,10 @@ with st.sidebar:
 st.markdown("""
 <div style='text-align:center; padding: 28px 0 18px 0;'>
     <h1 style='color:#e2e8f0; font-size:1.9rem; font-weight:700; margin:0;'>
-        🎓 Prediksi Performa Akademik Siswa
+        🎓 Prediksi Performa Akademik Pelajar Berdasarkan Penggunaan AI
     </h1>
     <p style='color:#7c3aed; font-size:1.05rem; margin:6px 0 0 0;'>
-        Berdasarkan Penggunaan AI · Algoritma K-Nearest Neighbors
+        Menggunakan Algoritma K-Nearest Neighbors (K-NN)
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -254,15 +254,15 @@ if uploaded:
         df_raw.dropna(how="all", inplace=True)
         df_raw.reset_index(drop=True, inplace=True)
         data_source = f"📂 {uploaded.name}"
-        st.success(f"✅ Dataset berhasil dimuat: **{len(df_raw)} baris**, **{len(df_raw.columns)} kolom**")
+        st.success(f"Dataset berhasil dimuat: **{len(df_raw)} baris**, **{len(df_raw.columns)} kolom**")
     except Exception as e:
         st.error(f"Gagal membaca file: {e}")
 
 if use_sample or df_raw is None or df_raw.empty:
     df_raw = generate_sample_data(200)
-    data_source = "🔬 Data sampel (demo)"
+    data_source = "Data sampel (demo)"
     if not uploaded:
-        st.info("ℹ️ Menggunakan **data sampel** untuk demonstrasi. Upload CSV Anda di sidebar.")
+        st.info("Menggunakan **data sampel** untuk demonstrasi. Upload CSV Anda di sidebar.")
 
 # Check target column
 if "Performance_Category" not in df_raw.columns:
@@ -310,18 +310,18 @@ with c4:
 
 # ── Tabs ─────────────────────────────────────────────────────
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "📊 Eksplorasi Data",
-    "📈 Evaluasi Model",
-    "🔎 Analisis Fitur",
-    "🔮 Prediksi Baru",
-    "📋 Dataset",
+    "Eksplorasi Data",
+    "Evaluasi Model",
+    "Analisis Fitur",
+    "Prediksi Baru",
+    "Dataset",
 ])
 
 # ═══════════════════════════════════════════════════════════════
 # TAB 1 — Eksplorasi Data
 # ═══════════════════════════════════════════════════════════════
 with tab1:
-    st.markdown("<div class='section-header'><h3>📊 Distribusi Performa Akademik</h3></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'><h3> Distribusi Performa Akademik</h3></div>", unsafe_allow_html=True)
 
     col_a, col_b = st.columns([1, 1])
 
@@ -365,7 +365,7 @@ with tab1:
         st.plotly_chart(fig_bar, use_container_width=True)
 
     # GenAI Hours vs GPA
-    st.markdown("<div class='section-header'><h3>🤖 Penggunaan GenAI vs GPA</h3></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'><h3> Penggunaan GenAI vs GPA</h3></div>", unsafe_allow_html=True)
 
     gpa_col = "Current_GPA" if "Current_GPA" in df_raw.columns else "Pre_Semester_GPA"
     if "Weekly_GenAI_Hours" in df_raw.columns:
@@ -386,7 +386,7 @@ with tab1:
 
     # Major distribution
     if "Major_Category" in df_raw.columns:
-        st.markdown("<div class='section-header'><h3>🏫 Distribusi Per Jurusan</h3></div>", unsafe_allow_html=True)
+        st.markdown("<div class='section-header'><h3>Distribusi Per Jurusan</h3></div>", unsafe_allow_html=True)
         major_perf = df_raw.groupby(["Major_Category", "Performance_Category"]).size().reset_index(name="Count")
         fig_major = px.bar(
             major_perf, x="Major_Category", y="Count",
@@ -406,7 +406,7 @@ with tab1:
 # TAB 2 — Evaluasi Model
 # ═══════════════════════════════════════════════════════════════
 with tab2:
-    st.markdown("<div class='section-header'><h3>📈 Confusion Matrix</h3></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'><h3>Confusion Matrix</h3></div>", unsafe_allow_html=True)
 
     col_cm, col_cv = st.columns([1, 1])
 
@@ -454,7 +454,7 @@ with tab2:
         st.plotly_chart(fig_cv, use_container_width=True)
 
     # Classification Report
-    st.markdown("<div class='section-header'><h3>📋 Laporan Klasifikasi</h3></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'><h3>Laporan Klasifikasi</h3></div>", unsafe_allow_html=True)
     report = result["report"]
     rows = []
     for label in result["classes"]:
@@ -471,7 +471,7 @@ with tab2:
     st.dataframe(report_df, use_container_width=True, hide_index=True)
 
     # K Optimization
-    st.markdown("<div class='section-header'><h3>🔍 Optimasi Nilai K</h3></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'><h3>Optimasi Nilai K</h3></div>", unsafe_allow_html=True)
     k_range = range(1, min(21, len(df_proc) // 5))
     acc_list = []
     for k in k_range:
@@ -510,7 +510,7 @@ with tab2:
 # TAB 3 — Analisis Fitur
 # ═══════════════════════════════════════════════════════════════
 with tab3:
-    st.markdown("<div class='section-header'><h3>🔎 Distribusi Fitur Numerik</h3></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'><h3>Distribusi Fitur Numerik</h3></div>", unsafe_allow_html=True)
 
     num_cols = [c for c in NUMERIC_FEATURES if c in df_raw.columns]
     color_map = {
@@ -535,7 +535,7 @@ with tab3:
         st.plotly_chart(fig_box, use_container_width=True)
 
     # Correlation heatmap
-    st.markdown("<div class='section-header'><h3>🌡️ Korelasi Antar Fitur</h3></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'><h3>Korelasi Antar Fitur</h3></div>", unsafe_allow_html=True)
     num_df = df_proc[[c for c in NUMERIC_FEATURES if c in df_proc.columns]]
     corr = num_df.corr()
     fig_heat = px.imshow(
@@ -554,7 +554,7 @@ with tab3:
 # TAB 4 — Prediksi Baru
 # ═══════════════════════════════════════════════════════════════
 with tab4:
-    st.markdown("<div class='section-header'><h3>🔮 Masukkan Data Siswa Baru</h3></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'><h3>Masukkan Data Siswa Baru</h3></div>", unsafe_allow_html=True)
     st.markdown("Isi data siswa di bawah ini untuk memprediksi kategori performa akademiknya.")
 
     col1, col2 = st.columns(2)
@@ -581,7 +581,7 @@ with tab4:
         prompt_skill= st.selectbox("Keahlian Prompt Engineering", skills_list)
         paid_sub    = st.selectbox("Langganan Berbayar", subs_list)
 
-    if st.button("🔮 Prediksi Sekarang", use_container_width=True):
+    if st.button("Prediksi Sekarang", use_container_width=True):
         # Build input row matching df_proc encoding
         new_raw = {
             "Year_of_Study":             year_study,
@@ -658,11 +658,11 @@ with tab4:
 # TAB 5 — Dataset
 # ═══════════════════════════════════════════════════════════════
 with tab5:
-    st.markdown(f"<div class='section-header'><h3>📋 Dataset ({data_source})</h3></div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='section-header'><h3>Dataset ({data_source})</h3></div>", unsafe_allow_html=True)
 
     col_s, col_e = st.columns([3, 1])
     with col_s:
-        search = st.text_input("🔍 Cari dalam dataset", "")
+        search = st.text_input("Cari dalam dataset", "")
     with col_e:
         show_n = st.selectbox("Tampilkan", [25, 50, 100, "Semua"], index=0)
 
@@ -683,7 +683,7 @@ with tab5:
         mime="text/csv",
     )
 
-    st.markdown("<div class='section-header'><h3>📊 Statistik Deskriptif</h3></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'><h3>Statistik Deskriptif</h3></div>", unsafe_allow_html=True)
     desc = df_raw[[c for c in NUMERIC_FEATURES if c in df_raw.columns]].describe().round(3)
     st.dataframe(desc, use_container_width=True)
 
@@ -691,6 +691,6 @@ with tab5:
 st.markdown("""
 <hr style='border-color:#2d3748; margin-top:40px;'>
 <p style='text-align:center; color:#475569; font-size:0.8rem;'>
-    🎓 Prediksi Performa Akademik · Algoritma KNN · Streamlit
+    Prediksi Performa Akademik Pelajar Berdasarkan Penggunaan AI · Algoritma K-NN · Streamlit
 </p>
 """, unsafe_allow_html=True)
