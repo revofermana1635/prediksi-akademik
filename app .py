@@ -166,7 +166,7 @@ with st.sidebar:
 st.markdown("""
 <div style='text-align:center; padding: 28px 0 18px 0;'>
     <h1 style='color:#e2e8f0; font-size:1.9rem; font-weight:700; margin:0;'>
-            page_title="Prediksi Performa Akademik Pelajar Berdasarkan Penggunaan AI",
+            Prediksi Performa Akademik Pelajar Berdasarkan Penggunaan AI
     </h1>
     <p style='color:#7c3aed; font-size:1.05rem; margin:6px 0 0 0;'>
         Menggunakan Algoritma K-Nearest Neighbors (K-NN)
